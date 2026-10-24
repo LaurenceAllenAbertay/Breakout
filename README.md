@@ -30,10 +30,11 @@ You are to spend between three and eight hours improving this simple Breakout im
 * Sounds with increasing tone between bounces.
 * Implement commentary with calls to an LLM such as Ollama
 
-# Time Details and Changelist
-_TO DO_
+# Time Details and Change list
 
-<Add information to this section about the time you've taken for this task along with a professional changelist.>
+* Added R to restart button and prompts in Game Over / Level Complete. All game objects are deleted then recreated and added a destructor so restarts don't leak memory. (20 Mins)
+
+#### Time Total: 20 mins
 
 ---
 

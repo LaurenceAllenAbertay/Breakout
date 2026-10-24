@@ -6,13 +6,41 @@
 GameManager::GameManager(sf::RenderWindow* window)
     : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), _lives(3), _pauseHold(0.f), _levelComplete(false),
-    _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f)
+    _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f), _restartKeyPressed(false)
 {
     _font.loadFromFile("font/montS.ttf");
     _masterText.setFont(_font);
     _masterText.setPosition(50, 400);
     _masterText.setCharacterSize(48);
     _masterText.setFillColor(sf::Color::Yellow);
+}
+
+GameManager::~GameManager()
+{
+    cleanup();
+}
+
+// LA: Clean up objects when the game manager is finished with 
+// so that they can be properly deallocated and prevent memory leaks
+void GameManager::cleanup()
+{
+    delete _paddle;
+    _paddle = nullptr;
+    
+    delete _ball;
+    _ball = nullptr;
+    
+    delete _brickManager;
+    _brickManager = nullptr;
+    
+    delete _powerupManager;
+    _powerupManager = nullptr;
+    
+    delete _messagingSystem;
+    _messagingSystem = nullptr;
+    
+    delete _ui;
+    _ui = nullptr;
 }
 
 void GameManager::initialize()
@@ -28,8 +56,39 @@ void GameManager::initialize()
     _brickManager->createBricks(5, 10, 80.0f, 30.0f, 5.0f);
 }
 
+// LA: Reset the game state to its initial conditions
+void GameManager::resetGame()
+{
+    cleanup();
+    
+    // LA: Reset all values to their initial conditions
+    _lives = INITIAL_LIVES;
+    _levelComplete = false;
+    _pause = false;
+    _pauseHold = 0.f;
+    _time = 0.f;
+    _timeLastPowerupSpawned = 0.f;
+    _powerupInEffect = { none,0.f };
+    _masterText.setString("");
+    
+    initialize();
+}
+
 void GameManager::update(float dt)
 {
+    // LA: Handle restart key press
+    bool restartPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::R);
+    // LA: This bool is used because if you don't check for when the key
+    // was just pressed, the game will reset every frame if held down
+    bool restartJustPressed = restartPressed && !_restartKeyPressed;
+    _restartKeyPressed = restartPressed;
+    
+    if (restartJustPressed)
+    {
+        resetGame();
+        return;
+    }
+    
     _powerupInEffect = _powerupManager->getPowerupInEffect();
     _ui->updatePowerupText(_powerupInEffect);
     _powerupInEffect.second -= dt;
@@ -37,12 +96,12 @@ void GameManager::update(float dt)
 
     if (_lives <= 0)
     {
-        _masterText.setString("Game over.");
+        _masterText.setString("Game over.\nPress R to restart.");
         return;
     }
     if (_levelComplete)
     {
-        _masterText.setString("Level completed.");
+        _masterText.setString("Level completed.\nPress R to restart.");
         return;
     }
     // pause and pause handling

@@ -13,13 +13,18 @@
 class GameManager {
 public:
     GameManager(sf::RenderWindow* window);
+    // LA: Destructor
+    ~GameManager();
     void initialize();
     void update(float dt);
     void loseLife();
     void render();
     void levelComplete();
     void powerupEffect(POWERUPS pu, float t);
-
+    
+    // LA: Restart game function
+    void resetGame();
+    
     Paddle* getPaddle() const;
     BrickManager* getBrickManager() const;
     PowerupManager* getPowerupManager() const;
@@ -28,12 +33,17 @@ public:
 
 
 private:
+    // LA: Clean up objects
+    void cleanup();
+    
     bool _pause;
     float _pauseHold;
     float _time;
     float _timeLastPowerupSpawned;
     int _lives;
     bool _levelComplete;
+    // LA: Check for restart
+    bool _restartKeyPressed;
     std::pair<POWERUPS, float> _powerupInEffect;
 
     sf::Font _font;
