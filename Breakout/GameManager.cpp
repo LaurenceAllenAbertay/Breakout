@@ -6,7 +6,7 @@
 GameManager::GameManager(sf::RenderWindow* window)
     : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), _lives(3), _pauseHold(0.f), _levelComplete(false),
-    _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f), _restartKeyPressed(false)
+    _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f), _restartKeyPressed(false), _shakeTimer(0.f)
 {
     _font.loadFromFile("font/montS.ttf");
     _masterText.setFont(_font);
@@ -70,6 +70,7 @@ void GameManager::resetGame()
     _timeLastPowerupSpawned = 0.f;
     _powerupInEffect = { none,0.f };
     _masterText.setString("");
+    _shakeTimer = 0.f;
     
     initialize();
 }
@@ -93,6 +94,8 @@ void GameManager::update(float dt)
     _ui->updatePowerupText(_powerupInEffect);
     _powerupInEffect.second -= dt;
     
+    if (_shakeTimer > 0.f)
+        _shakeTimer -= dt;
 
     if (_lives <= 0)
     {
@@ -130,7 +133,7 @@ void GameManager::update(float dt)
     _time += dt;
 
 
-    if (_time > _timeLastPowerupSpawned + POWERUP_FREQUENCY && rand()%700 == 0)      // TODO parameterise
+    if (_time > _timeLastPowerupSpawned + POWERUP_FREQUENCY && rand()%700 == 0) 
     {
         _powerupManager->spawnPowerup();
         _timeLastPowerupSpawned = _time;
@@ -151,11 +154,21 @@ void GameManager::loseLife()
     _lives--;
     _ui->lifeLost(_lives);
 
-    // TODO screen shake.
+    _shakeTimer = SHAKE_DURATION;
 }
 
 void GameManager::render()
 {
+    // Get the view to move it rapidly within a square to create screen shake 
+    sf::View camera = _window->getDefaultView();
+    if (_shakeTimer > 0.f)
+    {
+        float offsetX = (static_cast<float>(rand()) / RAND_MAX * 2.f - 1.f) * SHAKE_AMOUNT;
+        float offsetY = (static_cast<float>(rand()) / RAND_MAX * 2.f - 1.f) * SHAKE_AMOUNT;
+        camera.move(offsetX, offsetY);
+    }
+    _window->setView(camera);
+    
     _paddle->render();
     _ball->render();
     _brickManager->render();

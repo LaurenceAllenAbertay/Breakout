@@ -44,6 +44,9 @@ private:
     bool _levelComplete;
     // LA: Check for restart
     bool _restartKeyPressed;
+    // LA: Timer for tracking duration of screen shake
+    float _shakeTimer;
+    
     std::pair<POWERUPS, float> _powerupInEffect;
 
     sf::Font _font;
@@ -59,4 +62,8 @@ private:
 
     static constexpr float PAUSE_TIME_BUFFER = 0.5f;
     static constexpr float POWERUP_FREQUENCY = 7.5f;    // time between minimum powerup spawn
+    
+    // LA: Screen Shake
+    static constexpr float SHAKE_DURATION = 0.2f; // Seconds
+    static constexpr float SHAKE_AMOUNT = 10.0f; // Pixels
 };

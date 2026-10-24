@@ -32,9 +32,10 @@ You are to spend between three and eight hours improving this simple Breakout im
 
 # Time Details and Change list
 
-* Added R to restart button and prompts in Game Over / Level Complete. All game objects are deleted then recreated and added a destructor so restarts don't leak memory. (20 Mins)
+1. Added R to restart button and prompts in Game Over / Level Complete. All game objects are deleted then recreated and added a destructor so restarts don't leak memory. (20 Mins)
+2. Added screen shake on life lost (10 mins)
 
-#### Time Total: 20 mins
+#### Time Total: 30 mins
 
 ---
 
