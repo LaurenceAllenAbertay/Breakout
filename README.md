@@ -32,10 +32,12 @@ You are to spend between three and eight hours improving this simple Breakout im
 
 # Time Details and Change list
 
-1. Added R to restart button and prompts in Game Over / Level Complete. All game objects are deleted then recreated and added a destructor so restarts don't leak memory. (20 Mins)
+1. Added R to restart button and prompts in Game Over / Level Complete. All game objects are deleted then recreated and added a destructor so restarts don't leak memory. (20 mins)
 2. Added screen shake on life lost (10 mins)
+3. Added zoom on ball when about to hit the final brick, a prediction ball is send out ahead to check for eventual collision, if so zoom in on the ball. Also includes sound effects for the zooming states (2 hours 10 mins)
 
-#### Time Total: 30 mins
+
+#### Time Total: 2 hour 40 mins
 
 ---
 
