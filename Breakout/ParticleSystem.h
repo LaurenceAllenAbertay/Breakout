@@ -7,6 +7,7 @@ struct Particle
 {
     sf::Vector2f position;
     sf::Vector2f velocity;
+    float maxLifetime = 0.f;
     float lifetime;
     sf::Color colour;
     bool active = false;
@@ -22,6 +23,9 @@ public:
     
     // LA: Spawn a burst of particles
     void burst(sf::Vector2f position, sf::Color colour, int count);
+    
+    // LA: Spawn a cascade of particles on the screen
+    void cascade(int count);
 private:
     float getRandomRange(float min, float max);
     sf::RenderWindow* _window;
@@ -32,7 +36,7 @@ private:
     // LA: Particle System Constants
     static constexpr int MAX_PARTICLES = 1000;
     static constexpr float PARTICLE_LIFETIME = 1.0f;
-    static constexpr float PARTICLE_SIZE = 3.0f;
+    static constexpr float PARTICLE_SIZE = 10.0f;
     static constexpr float PARTICLE_SPEED = 100.0f;
     static constexpr float PARTICLE_GRAVITY = 600.0f;
 };

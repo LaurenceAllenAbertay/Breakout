@@ -42,7 +42,7 @@ void ParticleSystem::render()
         if (!particle.active) continue;
         
         sf::Color colour = particle.colour;
-        colour.a = static_cast<sf::Uint8>(255 * (particle.lifetime / PARTICLE_LIFETIME));
+        colour.a = static_cast<sf::Uint8>(255 * (particle.lifetime / particle.maxLifetime));
         
         sf::Vector2f particlePosition = particle.position;
         
@@ -73,8 +73,30 @@ void ParticleSystem::burst(sf::Vector2f position, sf::Color colour, int count)
         };
         particle.colour = colour;
         particle.active = true;
+        particle.maxLifetime = PARTICLE_LIFETIME;
         particle.lifetime = PARTICLE_LIFETIME;
         
+        spawned++;
+    }
+}
+
+void ParticleSystem::cascade(int count)
+{
+    float screenWidth = static_cast<float>(_window->getSize().x);
+    
+    int spawned = 0;
+    
+    for (Particle& particle : _particles)
+    {
+        if (spawned >= count) break;
+        if (particle.active) continue;
+
+        particle.position = { getRandomRange(0.f, screenWidth), getRandomRange(-400.f, 0.f) };
+        particle.velocity = { getRandomRange(-50.f, 50.f), getRandomRange(0.f, 100.f) };
+        particle.colour = sf::Color(rand() % 256, rand() % 256, rand() % 256);
+        particle.lifetime = 3.f;
+        particle.maxLifetime = 3.f;
+        particle.active = true;
         spawned++;
     }
 }

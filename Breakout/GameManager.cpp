@@ -72,7 +72,7 @@ void GameManager::initialize()
     _ui = new UI(_window, _lives, this);
 
     // Create bricks
-    _brickManager->createBricks(5, 10, 80.0f, 30.0f, 5.0f);
+    _brickManager->createBricks(1, 1, 80.0f, 30.0f, 5.0f);
 }
 
 // LA: Reset the game state to its initial conditions
@@ -172,7 +172,11 @@ void GameManager::update(float dt)
     if (_levelCompleteTimer > 0.f)
     {
         _levelCompleteTimer -= dt;
-        if (_levelCompleteTimer <= 0.f) _levelComplete = true;
+        if (_levelCompleteTimer <= 0.f)
+        {
+            _levelComplete = true;
+            _particleSystem->cascade(300);
+        }
     }
 
     // timer.
