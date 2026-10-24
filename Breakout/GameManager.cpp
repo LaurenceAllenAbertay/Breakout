@@ -5,7 +5,7 @@
 #include <iostream>
 
 GameManager::GameManager(sf::RenderWindow* window)
-    : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
+    : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr), _particleSystem(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), _lives(3), _pauseHold(0.f), _levelComplete(false),
     _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f), _restartKeyPressed(false), _shakeTimer(0.f), 
     _zoomOnBall(false), _wasZoomingOnBall(false) , _currentZoom(1.f), _levelCompleteTimer(0.f)
@@ -21,6 +21,10 @@ GameManager::GameManager(sf::RenderWindow* window)
         std::cout << "Failed to load sounds/zoomIn.wav" << std::endl;
     if (!_zoomOutBuffer.loadFromFile("sounds/zoomOut.wav"))
         std::cout << "Failed to load sounds/zoomOut.wav" << std::endl;
+    
+    // LA: Be Quiet!
+    _zoomInSound.setVolume(50.f);
+    _zoomOutSound.setVolume(50.f);
     
     _zoomInSound.setBuffer(_zoomInBuffer);
     _zoomOutSound.setBuffer(_zoomOutBuffer);
@@ -47,6 +51,9 @@ void GameManager::cleanup()
     delete _powerupManager;
     _powerupManager = nullptr;
     
+    delete _particleSystem;
+    _particleSystem = nullptr;
+    
     delete _messagingSystem;
     _messagingSystem = nullptr;
     
@@ -61,6 +68,7 @@ void GameManager::initialize()
     _messagingSystem = new MessagingSystem(_window);
     _ball = new Ball(_window, 400.0f, this); 
     _powerupManager = new PowerupManager(_window, _paddle, _ball);
+    _particleSystem = new ParticleSystem(_window);
     _ui = new UI(_window, _lives, this);
 
     // Create bricks
@@ -124,6 +132,9 @@ void GameManager::update(float dt)
     if (_zoomOnBall && !_wasZoomingOnBall) _zoomInSound.play();
     if (!_zoomOnBall && _wasZoomingOnBall) _zoomOutSound.play();
     _wasZoomingOnBall = _zoomOnBall;
+    
+    // LA: Update all particles when not paused
+    if (!_pause) _particleSystem->update(dt);
     
     if (_lives <= 0)
     {
@@ -220,6 +231,8 @@ void GameManager::render()
     _ball->render();
     _brickManager->render();
     _powerupManager->render();
+    _particleSystem->render();
+    
     // LA: Screen Space Overlay
     _window->setView(_window->getDefaultView()); 
     _window->draw(_masterText);
@@ -280,4 +293,5 @@ sf::RenderWindow* GameManager::getWindow() const { return _window; }
 UI* GameManager::getUI() const { return _ui; }
 Paddle* GameManager::getPaddle() const { return _paddle; }
 BrickManager* GameManager::getBrickManager() const { return _brickManager; }
+ParticleSystem* GameManager::getParticleSystem() const { return _particleSystem; }
 PowerupManager* GameManager::getPowerupManager() const { return _powerupManager; }

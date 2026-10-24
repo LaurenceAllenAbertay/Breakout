@@ -9,7 +9,7 @@
 #include "PowerupManager.h"
 #include "MessagingSystem.h"
 #include "UI.h"
-
+#include "ParticleSystem.h"
 
 
 class GameManager {
@@ -30,6 +30,7 @@ public:
     Paddle* getPaddle() const;
     BrickManager* getBrickManager() const;
     PowerupManager* getPowerupManager() const;
+    ParticleSystem* getParticleSystem() const;
     sf::RenderWindow* getWindow() const;
     UI* getUI() const;
 
@@ -76,6 +77,7 @@ private:
     Ball* _ball;
     BrickManager* _brickManager;
     PowerupManager* _powerupManager;
+    ParticleSystem* _particleSystem;
     MessagingSystem* _messagingSystem;
     UI* _ui;
 
@@ -83,11 +85,11 @@ private:
     static constexpr float POWERUP_FREQUENCY = 7.5f;    // time between minimum powerup spawn
     
     // LA: Screen Shake
-    static constexpr float SHAKE_DURATION = 0.2f; // Seconds
-    static constexpr float SHAKE_AMOUNT = 10.0f; // Pixels
+    static constexpr float SHAKE_DURATION = 0.2f; 
+    static constexpr float SHAKE_AMOUNT = 10.0f;
     
     // LA: Winning Zoom
     static constexpr float ZOOM_AMOUNT = 0.5f;
     static constexpr float ZOOM_SPEED = 1.5f;
-    static constexpr float LEVEL_COMPLETE_DELAY = 2.0f;
+    static constexpr float LEVEL_COMPLETE_DELAY = 1.5f;
 };
