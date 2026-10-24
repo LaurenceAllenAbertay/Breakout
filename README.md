@@ -36,9 +36,10 @@ You are to spend between three and eight hours improving this simple Breakout im
 2. Added screen shake on life lost (10 mins)
 3. Added zoom on ball when about to hit the final brick, a prediction ball is send out ahead to check for eventual collision, if so zoom in on the ball. Also includes sound effects for the zooming states (2 hours 10 mins)
 4. Added simple particle system that is capable of spawning a burst of particles, I used it to spawn particles when you break a brick (40 mins)
+5. Added a cascade method to the particle system that rains down multi-coloured particles from the top of the screen when you win the game (20 mins)
 
 
-#### Time Total: 3 hours 20 mins
+#### Time Total: 3 hours 40 mins
 
 ---
 
