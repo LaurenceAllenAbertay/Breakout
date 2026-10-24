@@ -14,6 +14,10 @@ public:
     void render();
     void setVelocity(float coeff, float duration);
     void setFireBall(float duration);
+    
+    // LA: So GameManager has access to the Balls info
+    sf::FloatRect getBounds() const;
+    sf::Vector2f getDirection() const;
 
 private:
     sf::CircleShape _sprite;
@@ -26,7 +30,8 @@ private:
 
     GameManager* _gameManager;  // Reference to the GameManager
 
-
+    
+    
     static constexpr float RADIUS = 10.0f;      
     static constexpr float VELOCITY = 350.0f;   // for reference.
 };

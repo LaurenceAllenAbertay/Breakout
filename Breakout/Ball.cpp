@@ -114,3 +114,13 @@ void Ball::setFireBall(float duration)
     _isFireBall = false;
     _timeWithPowerupEffect = 0.f;    
 }
+
+sf::FloatRect Ball::getBounds() const
+{
+    return _sprite.getGlobalBounds();   
+}
+
+sf::Vector2f Ball::getDirection() const
+{
+    return _direction;
+}   

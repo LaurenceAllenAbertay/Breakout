@@ -1,5 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+// LA: Include Audio Features
+#include <SFML/Audio.hpp>
 #include "CONSTANTS.h"
 #include "Paddle.h"
 #include "Ball.h"
@@ -36,6 +38,9 @@ private:
     // LA: Clean up objects
     void cleanup();
     
+    // LA: Function to check whether the final brick is in the trajectory of the ball
+    bool willBallHitLastBrick();
+    
     bool _pause;
     float _pauseHold;
     float _time;
@@ -46,6 +51,20 @@ private:
     bool _restartKeyPressed;
     // LA: Timer for tracking duration of screen shake
     float _shakeTimer;
+    // LA: Zoom in on the ball when about to hit the final brick
+    bool _zoomOnBall;
+    // LA: Whether the zoom just ended
+    bool _wasZoomingOnBall;
+    // LA: Current zoom percentage
+    float _currentZoom;
+    // LA: Timer for how long before showing level complete state after winning
+    float _levelCompleteTimer;
+
+    // LA: Zooming sounds
+    sf::SoundBuffer _zoomInBuffer;
+    sf::SoundBuffer _zoomOutBuffer;
+    sf::Sound _zoomInSound;
+    sf::Sound _zoomOutSound;
     
     std::pair<POWERUPS, float> _powerupInEffect;
 
@@ -66,4 +85,9 @@ private:
     // LA: Screen Shake
     static constexpr float SHAKE_DURATION = 0.2f; // Seconds
     static constexpr float SHAKE_AMOUNT = 10.0f; // Pixels
+    
+    // LA: Winning Zoom
+    static constexpr float ZOOM_AMOUNT = 0.5f;
+    static constexpr float ZOOM_SPEED = 1.5f;
+    static constexpr float LEVEL_COMPLETE_DELAY = 2.0f;
 };

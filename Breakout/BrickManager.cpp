@@ -58,3 +58,13 @@ int BrickManager::checkCollision(sf::CircleShape& ball, sf::Vector2f& direction)
     }
     return collisionResponse;
 }
+
+int BrickManager::getBrickCount() const
+{
+    return static_cast<int>(_bricks.size());
+}
+
+sf::FloatRect BrickManager::getBrickBounds(int index) const
+{
+    return _bricks[index].getBounds();
+}
